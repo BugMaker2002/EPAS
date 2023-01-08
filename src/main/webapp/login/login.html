@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>绩效考核系统-登录</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <script type="text/javascript" src="login.js"></script>
+    <script src="../layui-v2.6.8/layui/layui.js"></script>
+    <script type="text/javascript" src="../jquery-3.6.0.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="login-box">
+        <h1>绩效考核系统</h1>
+        <nav>
+            <span id="staffLogin">员工登录</span>
+            <span id="adminLogin">管理员登录</span>
+            <div class="animation staff"></div>
+        </nav>    
+        <div class="item">
+            <input id="account" type="text" placeholder="账号" autofocus autocomplete="off">
+        </div>
+        <div class="item">
+            <input id="psw" type="password" placeholder="密码" autocomplete="off">
+            <img id = 'eye' class="eye" src="../resource/icon/closedEye.png" val='0'></i>
+        </div>
+        <button id="loginBtn" type="submit">登录</button>
+    </div>
+</body>
+</html>

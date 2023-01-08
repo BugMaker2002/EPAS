@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>绩效结果</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+
+
+<div class="demoTable">
+    <div class="layui-inline">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberDepart" class="layui-input" id="searchMemberDepart" placeholder="部门">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">职位</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberPosition" class="layui-input" id="searchMemberPosition" placeholder="职位">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">年份</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberPosition" class="layui-input" id="searchYear" placeholder="年份">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">季度</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberPosition" class="layui-input" id="searchSeason" placeholder="季度">
+        </div>
+    </div>
+
+
+
+    <div class="layui-inline">
+        <button class="layui-btn" type="button" data-type="reload" lay-filter="LAY-user-front-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            搜索
+        </button>
+    </div>
+</div>
+<table id="resultTable" lay-filter="test" style="width: auto"></table>
+
+<script>
+    layui.use(['table','form'], function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+
+        //获取表格数据
+        table.render({
+            elem: '#resultTable'
+            ,height: 312
+            // ,width:520
+            ,url: "http://localhost:8080/EPAS/ResultServlet/selectAll" //数据接口
+
+            ,page: false //开启分页
+
+            ,cols: [[ //表头
+                {field: 'number', title: '序号', width:'15%', sort: true, fixed: 'center'}  //user_id
+                ,{field: 'iD', title: '成员ID', width:'17%', sort: true, fixed: 'center'}  //user_id
+                ,{field: 'grade', title: '评级', width:'17%', sort: true}
+                ,{field: 'year', title: '年份', width:'17%', sort: true}
+                ,{field: 'semester', title: '季度', width:'17%', sort: true}
+                ,{field: 'proximity', title: '相似度', width:'17%', sort: true}
+
+            ]]
+        });
+
+        //搜索监听
+        active ={
+            reload: function(){
+                var index = layer.msg('查询中，请稍后...', { icon: 16, time: false, shade: 0 });
+                setTimeout(function (){
+                    //执行重载
+                    table.reload('resultTable',{
+                        // page:{
+                        //     curr: 1
+                        // }
+                        url:"http://localhost:8080/EPAS/ResultServlet/selectByCondition"
+                        ,where:{
+                            dept_name :$("#searchMemberDepart").val(),
+                            post_name :$("#searchMemberPosition").val(),
+                            year :$("#searchYear").val(),
+                            semester:$("#searchSeason").val()
+                        }
+                    });
+                    layer.close(index);
+                },500);
+
+            }
+        }
+        $('.demoTable .layui-btn').on('click', function(){  //监听 搜索
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>

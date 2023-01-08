@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>修改密码</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../layui-v2.6.8/layui/css/layui.css">
+    <style>
+        body {
+            background: rgb(30, 30, 30);
+        }
+
+        i {
+            font-style: normal;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .box {
+            text-align: center;
+            padding: 20px;
+        }
+
+        input {
+            height: 24px;
+            background: none;
+            color: wheat;
+            border-radius: 8px;
+            border: 1px solid rgba(252, 244, 5, 0.499);
+            font-size: 16px;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-container">
+        <div class="layui-row">
+            <div id="bigBox" class="layui-col-md6 layui-col-md-offset2"
+                style="height:auto;padding-top:30px;border-radius: 20px;margin-top: 15%;padding: 20px;padding-bottom: 40px; border: 1px solid black; background: rgba(255,255,255,0.05);">
+                <h1 style="text-align:center; color: white; margin: 16px;">修改密码</h1>
+
+                <hr class="layui-border-blue" style="width: 40%; margin:0 auto">
+                <div class="box">
+                    <i style="margin-right: 24px">原密码：</i>
+                    <input id="oldPassword" autocomplete="off">
+                </div>
+                <div class="box">
+                    <i style="margin-right: 24px">新密码：</i>
+                    <input id="newPassword1" type="password">
+                </div>
+                <div class="box">
+                    <i>确认密码：</i>
+                    <input id="newPassword2" type="password">
+                </div>
+                <div class="layui-col-md6 layui-col-md-offset3">
+                    <button id="confirm_button" type="button" class="layui-btn layui-btn-fluid"
+                        style="margin-top: 20px;">确 认 修 改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../layui-v2.6.8/layui/layui.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+
+        // url
+        var modify_password_url = 'http://192.168.43.61:8080/user/personalCenter/modifyPassword'
+
+
+        user_data = {}  //接收index页传来的用户数据
+        window.addEventListener('message', function (event) {
+            user_data = event.data
+            console.log('接收到用户数据')
+            console.log(user_data)
+        });
+
+        layui.use(['layer',], function () {
+            var layer = layui.layer
+            var $ = layui.jquery
+
+            // 加载层
+            var loading = function () {
+                var index = layer.open({
+                    type: 3,
+                    title: "",
+                    content: "",
+                    shade: 0.1,
+                })
+                return index
+            }
+
+            var confirmBtn = document.getElementById("confirm_button")
+            confirmBtn.onclick = function () {
+                var _old_password = $('#oldPassword').val()
+                var _new_password1 = $('#newPassword1').val()
+                var _new_password2 = $('#newPassword2').val()
+                if (_old_password != "" && _new_password1 != "" && _new_password2 != "") {
+                    if (_new_password1 != _new_password2) {
+                        layer.msg("两次输入密码不一致，请重新输入")
+                    }
+                    else {
+                        var send_data = {
+                            user_id: user_data.id,
+                            old_password: _old_password,
+                            new_password: _new_password1
+                        }
+                        console.log(send_data)
+                        var index = loading()
+                        $.ajax({
+                            type: "post",
+                            url: modify_password_url,
+                            dataType: "json",
+                            data: send_data,
+                            timeout:4000,
+                            success: function (res) {
+                                console.log(res)
+                                if (res.msg == "成功") {
+                                    layer.msg("修改密码成功")
+                                }
+                                else {
+                                    layer.msg(res.msg)
+                                }
+                                layer.close(index)
+                            },
+                            error: function () {
+                                layer.msg("修改密码失败")
+                                layer.close(index)
+                            }
+                        })
+                    }
+                }
+                else {
+                    layer.msg("密码不能为空")
+                }
+            }
+        })
+    }
+
+</script>
+
+</html>

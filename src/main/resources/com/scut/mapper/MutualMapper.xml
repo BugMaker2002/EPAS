@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scut.mapper.MutualMapper">
+    <insert id="add">
+        insert into t_mutual_data(assess_ID,be_assess_ID,relationship,semester,year,result) values(#{assess_ID},
+        #{be_assess_ID},#{relationship},#{semester},#{year},#{result})
+    </insert>
+    <update id="updateState">
+        update t_member
+        set state="t"
+        where ID=#{ID}
+    </update>
+
+    <select id="selectAllData" resultType="com.scut.pojo.MutualData">
+        select * from t_mutual_data where assess_ID=#{assess_ID} and be_assess_ID=#{be_assess_ID} and
+                                              year=#{year} and semester=#{semester}
+    </select>
+    <select id="selectMemberByDepartment" resultType="com.scut.pojo.Member">
+        select * from t_member where d_name=#{d_name} and ID!=#{ID}
+    </select>
+</mapper>

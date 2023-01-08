@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>绩效考核系统</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" href="../layui-v2.6.8/layui/css/layui.css">
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="../jquery-3.6.0.js"></script>
+    <script src="../layui-v2.6.8/layui/layui.js"></script>
+</head>
+
+<body>
+    <ul class="layui-nav layui-nav-tree layui-nav-side" lay-bar="disabled" style="width: 15%;border-radius: 0; display: inline-block;" id="navigation">
+        <div style=" width: 100%; text-align: center; padding: 16px 0px 16px 0px;">
+            <p style="font-size: 32px; color: rgba(255,255,255,0.8); cursor: pointer;" @click="show_home_page">绩效考核系统</p>
+            <br>
+            <hr class="layui-border-blue">
+        </div>
+        <li class="layui-nav-item layui-nav-child-c layui-nav-itemed">
+            <a href="javascript:;" style="letter-spacing: 5px; font-size: 16px;">
+                你好,
+                <span style="font-size: 24px;" id="user_name">none</span>
+            </a>
+            <dl class="layui-nav-child" >
+                <dd>
+                    <span id="user_id" style="color: rgb(25, 153, 192);">工号：none</span>
+                </dd>
+                <dd>
+                    <span style="color: rgb(25, 153, 192);" id="user_dept">none</span>
+                    <br>
+                    <span style="color: rgb(25, 153, 192);" id="user_pos">none</span>
+
+                </dd>
+                <dd id="modify_password" class="able"><a href="javascript:;" >修改密码</a></dd>
+                <dd id="exit" class="able"><a href="javascript:;" >退出登录</a></dd>
+            </dl>
+        </li>
+
+        <li class="layui-nav-item  layui-nav-child-c">
+            <a href="javascript:;" id="index" style=" background: #0496f749;">
+                首页
+            </a>
+        </li>
+
+        <li class="layui-nav-item  layui-nav-child-c">
+            <a href="javascript:;" id="self_assessment">
+                自评
+            </a>
+        </li>
+
+        <li class="layui-nav-item layui-nav-child-c">
+            <a href="javascript:;" id="mutural_assessment" >
+                互评
+            </a>
+
+        </li>
+
+        <li class="layui-nav-item layui-nav-child-c">
+            <a href="javascript:;" id="assessment_result">考核结果</a>
+        </li>
+    </ul>
+
+    <div id="top">
+        <span id="top_text">首页</span>
+    </div>
+    <iframe id="rightBody" src="../home/home.html" scrolling="yes" allowfullscreen="true">
+
+    </iframe>
+</body>
+
+
+</html>

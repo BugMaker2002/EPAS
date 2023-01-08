@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>指标管理</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+
+
+<div class="demoTable">
+    <div class="layui-inline">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberDepart" class="layui-input" id="searchMemberDepart" placeholder="部门">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">职位</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberPosition" class="layui-input" id="searchMemberPosition" placeholder="职位">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">年份</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberPosition" class="layui-input" id="searchYear" placeholder="年份">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">季度</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberPosition" class="layui-input" id="searchSeason" placeholder="季度">
+        </div>
+    </div>
+
+
+
+    <div class="layui-inline">
+        <button class="layui-btn" type="button" data-type="reload" lay-filter="LAY-user-front-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            搜索
+        </button>
+    </div>
+</div>
+<table id="borrowingInformationTable" lay-filter="test" style="width: auto"></table>
+
+
+
+<!--<a href="http://localhost:63342/Library%20Project/Administrator/Function_Page/data.json">use</a>-->
+<button id="addEmpId" type="button" class="layui-btn layui-btn-fluid ">添加指标</button>
+<script type="text/javascript">
+    /*
+    弹出添加弹窗
+  */
+    layui.use(['table'],function (){
+        var $ = layui.jquery;
+        var table = layui.table;
+        $("#addEmpId").click(function(){
+            layer.open({
+                type:2,
+                title:"添加指标",
+                content:"./standard_add.html",
+                area:["600px","500px"],
+                shade:0.3,
+                anim:5,
+                end:function(){
+                    console.log("添加层被关闭了....");
+                    //刷新整合页面
+                    //location.reload();
+                    //只重载表格
+                    table.reload("borrowingInformationTable");
+                },
+
+            });
+
+        })
+
+    })
+</script>
+<script type="text/html" id="barDemo">
+    <button type='button' class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'>删除</button>
+</script>
+<script type="text/html" id ="imgtmp">
+    <img src="{{}}}" />
+
+
+
+</script>
+<script>
+    layui.use(['table','form'], function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+
+
+        //获取表格数据
+        table.render({
+            elem: '#borrowingInformationTable'
+            ,height: 312
+            // ,width:520
+            ,url: "http://localhost:8080/EPAS/TargetServlet/selectAllTargets"
+
+            ,page: false //开启分页
+
+            ,cols: [[ //表头
+                {field: 't_index', title: '指标ID', width:'12.5%', sort: true, fixed: 'center'}  //user_id
+                ,{field: 'description', title: '描述', width:'12.5%', sort: true, fixed: 'center'}  //user_id
+                ,{field: 'weight', title: '权重', width:'12.5%', sort: true}
+                ,{field: 'd_name', title: '部门', width:'12.5%', sort: true}
+                ,{field: 'position', title: '职位', width:'12.5%', sort: true}
+                ,{field: 'year', title: '年份', width:'12.5%', sort: true}
+                ,{field: 'semester', title: '季度', width:'12.5%', sort: true}
+
+
+                , {title:"操作",width:"12.5%",align:"center", toolbar: '#barDemo'}
+            ]]
+        });
+
+        //行的删除与修改
+        table.on('tool(test)',function(obj){
+            //获取当前行数据
+            var data = obj.data;
+            console.log(data);
+            //获取当前行点击的事件
+            var e = obj.event;
+
+            var submit = {
+                t_index:data.t_index,
+                d_name:data.d_name,
+                position:data.position,
+                year:data.year,
+                semester:data.semester
+            }
+            var subj= JSON.stringify(submit);
+
+            if(e=='del'){
+                //弹出删除窗口,确认是否删除
+                layer.confirm("是否删除?",{icon:3,title:"提示"},function(index){
+                    //调用AJAX删除后台数据--> 获取删除数据的ID
+                    $.ajax({
+                        type:"POST",
+                        data:subj,
+                        url:'http://localhost:8080/EPAS/TargetServlet/deleteTarget',
+                        dataType:'json',
+                        success:function(data)
+                        {
+                            if(1){  //成功
+
+                                var rowIndex = $(obj.tr).attr('data-index');//当前行的索引
+
+                                var tableData = layui.table.cache['borrowingInformationTable'];
+                                obj.del(); //删除对应行
+
+                                tableData.splice(rowIndex,1); //删除缓存的行
+
+                                layer.close(index);
+
+                                table.reload("borrowingInformationTable",{data : tableData});
+
+                                console.log(tableData);
+
+
+                            }else{
+                                //删除失败
+                                layer.msg("删除失败");
+                            }
+                        },
+                        error:function ()
+                        {
+                            //删除失败
+                            layer.msg("删除失败了");
+                        }
+                    })
+
+                });
+            } else{  //其他
+                layer.msg("对不起,功能还在路上...");
+            }
+        });
+
+
+        //搜索监听
+        active ={
+            reload: function(){
+                var index = layer.msg('查询中，请稍后...', { icon: 16, time: false, shade: 0 });
+                setTimeout(function (){
+                    //执行重载
+                    table.reload('borrowingInformationTable',{
+                        // page:{
+                        //     curr: 1
+                        // }
+                        url:"http://localhost:8080/EPAS/TargetServlet/selectTargetsByCondition"
+                        ,where:{
+                            dept_name :$("#searchMemberDepart").val(),
+                            post_name :$("#searchMemberPosition").val(),
+                            year :$("#searchYear").val(),
+                            semster:$("#searchSeason").val()
+                        }
+                    });
+                    layer.close(index);
+                },500);
+
+            }
+        }
+        $('.demoTable .layui-btn').on('click', function(){  //监听 搜索
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>考核界面</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+    <script type="text/javascript" src="assessment_page.js"></script>
+    <script type="text/javascript" src="../jquery-3.6.0.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="../layui-v2.6.8/layui/layui.js"></script>
+    <link rel="stylesheet" type="text/css" href="assessment_page.css">
+    <link rel="stylesheet" href="../layui-v2.6.8/layui/css/layui.css">
+</head>
+
+<body>
+    
+    <!-- 用于传数据 -->
+    <div style="display: none;">
+        <span id="assess_id"></span>
+        <span id="assess_year"></span>
+        <span id="assess_quart"></span>
+    </div>
+
+
+    <br>
+    <div class="top">
+        <div class="layui-row">
+            <div class="layui-col-md4 layui-col-md-offset2">
+                <p>被考核人：<span class="info" id="user_name">user_name</span></p>
+            </div>
+            <div class="layui-col-md4 layui-col-md-offset2">
+                <p>工号：<span class="info" id="user_id">user_id</span></p>
+            </div>
+        </div>
+
+        <div class="layui-row">
+            <div class="layui-col-md4 layui-col-md-offset2">
+                <p>部门：<span class="info" id="user_dept">user_dept</span></p>
+            </div>
+            <div class="layui-col-md4 layui-col-md-offset2">
+                <p>职位：<span class="info" id="user_pos">user_pos</span></p>
+            </div>
+        </div>
+
+        <div class="layui-row">
+            <div class="layui-col-md4 layui-col-md-offset5">
+                <p>您是该职员的<input id="user_relation"></p>
+            </div>
+        </div>
+
+        <br>
+        <p style="font-size: 32px; margin-left: 32px;">TA的自评</p>
+        <br>
+    </div>
+
+
+    <textarea id="description" placeholder="." disabled></textarea>
+
+    <div id="myAssessment">
+        <p style="font-size: 32px; margin-left: 32px;">我的评价</p>
+        <br>
+        <br>
+
+        <div class="layui-row">
+            <div class="layui-col-md5 indices" v-for="i in indices">
+                <span class="desc">{{i}}</span>
+                <div class="star"></div>
+            </div>
+        </div>
+
+    </div>
+
+<!--    <button id="submit">提交</button>-->
+
+</body>
+
+</html>

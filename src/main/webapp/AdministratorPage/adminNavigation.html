@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管理员界面</title>
+    <!--    <link href="admin.css" rel="stylesheet" type="text/css" />-->
+    <!--    <script src="admin.js" type="text/javascript"></script>-->
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <script type="text/css">
+        ::-webkit-scrollbar {
+
+            width: 0px;
+
+            height: 12px;
+
+        }
+
+        ::-webkit-scrollbar-track {
+
+            box-shadow: inset 0 0 10px olivedrab;
+
+            border-radius: 10px;
+
+        }
+
+        ::-webkit-scrollbar-thumb {
+
+            border-radius: 10px;
+
+            background: yellowgreen;
+
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+
+        }
+    </script>
+
+
+</head>
+<body>
+
+<div class="layui-layout layui-layout-admin">
+    <div class ="layui-fluid layui-header" style="background-color: #393d49 "> <!--头部导航栏-->
+        <ul class="layui-nav">
+            <d id ="title" style="color: #009688; font-size :20px;line-height: 50px">绩效管理系统</d>
+            <li class="layui-nav-item" style="line-height: 50px; float:right">
+                <a href="" >
+                    <i class="layui-icon layui-icon-username" >
+                        <d>我</d>
+                    </i>
+                </a>
+                <dl class="layui-nav-child">
+                    <!--                    <dd id="editInformation"><a href="javascript:;">修改信息</a></dd>-->
+                    <dd id="exit"><a href="javascript:;">退出</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black" id="aside_navigator"  style="float: left;">   <!--左侧导航栏-->
+        <ul class="layui-nav layui-nav-tree"  style="border-radius: 1px" lay-filter="test">
+            <li class="layui-nav-item  layui-nav-itemed">
+                <a href="javscript:;" id="borrowing_page_link">信息管理</a>
+                <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                    <dd><a lay-href="javascript:" class="left_navigation"  menu_url="./Function_Page/clerk.html"  menu_name="员工管理"    menu_id="1">员工管理</a></dd>
+                    <dd><a lay-href="javascript:" class="left_navigation"  menu_url="./Function_Page/standard.html"  menu_name="指标管理"    menu_id="2">指标管理</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-nav-itemed">
+                <a href="javscript:;" id ="user_manage_page_link">考核结果</a>
+                <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                    <dd><a lay-href="javascript:" class="left_navigation"  menu_url="./Function_Page/result.html"  menu_name="绩效成绩"    menu_id="3">绩效成绩</a></dd>
+                    <dd><a lay-href="javascript:" class="left_navigation"  menu_url="./Function_Page/chart.html"  menu_name="显示用户信息列表"    menu_id="4">结果分析</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-body">
+        <div class="layadmin-pagetabs" style="position: relative;margin: 0px;padding: 0px;">
+            <!--左右移动按钮-->
+            <div class="layui-icon layui-icon-prev" id="left_button"  style="position: absolute;left: 0;background-color: #ece9e9;width:40px;height:40px;text-align: center;line-height: 40px;color: #000000;"></div>
+            <div class="layui-icon  layui-icon-next" id="right_button" style="position: absolute;right: 0;background-color: #ffffff;width:40px;height:40px;text-align: center;line-height: 40px;color: #000000;"></div>
+            <!--tabs标签以及子页面显示-->
+            <div class="layui-tab " lay-filter="head_tabs" lay-unauto="" lay-allowclose="true"  style="left: 41px;position: relative;width:93%;overflow: hidden; margin-top: 0px;">
+                <ul class="layui-tab-title">
+
+                </ul>
+                <div class="layui-tab-content" style="height: 100%;">
+                    <!--        <div class="layui-tab-item layui-show">1</div>-->
+                    <!--        <div class="layui-tab-item">2</div>-->
+                    <!--        <div class="layui-tab-item">3</div>-->
+                    <!--        <div class="layui-tab-item">4</div>-->
+                    <!--        <div class="layui-tab-item">5</div>-->
+                    <!--        <div class="layui-tab-item">6</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    layui.use(['layer'],function (){
+        var layer =layui.layer;
+
+        //管理员退出
+        var exitBtn = document.getElementById("exit");
+        exitBtn.onclick = function() {
+            layer.confirm("确定退出登录？",function(index) {
+                console.log('退出');
+                layer.close(index);
+                window.location.href='../login/login.html';
+            })
+        }
+
+        //Tab的切换功能，切换事件监听等，需要依赖element模块
+        var $ = layui.jquery;
+        var element = layui.element;
+
+        //触发事件
+        var active ={
+            tabAdd:function(){
+                //新增一个Tab项
+                var menu_url = $(this).attr('menu_url');
+                var menu_name = $(this).attr('menu_name');
+                var menu_id = $(this).attr('menu_id');
+
+                //判断是否有一个Tab
+
+                var arrayObj = new Array();  //创建数组
+
+                $(".layui-tab-title").find('li').each(function(){
+                    var y = $(this).attr('lay-id');
+                    console.log(y);
+                    arrayObj.push(y);
+                });
+                var have = $.inArray(menu_id, arrayObj);
+                if(have>=0){
+                    //tab 有标签
+                    element.tabChange('head_tabs',menu_id);// 切换到当前页面
+                }
+                else{
+                    //没有相同tab
+                    element.tabAdd('head_tabs',{
+                        title:menu_name
+                        ,id:menu_id
+                        ,content:'<iframe scrolling="yes" src='+menu_url+' data-frameid="'+menu_id+'" height=\'100%\' width=\'100%\' frameborder="0" border="0" marginwidth="0" ></iframe>'
+                    })
+                    element.tabChange('head_tabs',menu_id);  //切换到当且点击的页面
+                }
+            },
+            tab_change: function (data_id) {
+                location.hash = 'test1=' + data_id;
+                var layid = location.hash.replace(/^#test1=/, '');
+                element.tabChange('test1', layid);
+            }
+
+        };
+        //向右移动
+        var less_width=0;sum_total=0;less_sum_title=0;tab_click_list=[];
+        var total_list=[];   //记录菜单滚动宽度
+        $('#right_button').click(function () {
+            var sum_title=parseFloat($('.layui-tab-title').width());
+            //temp_data存上一次宽度
+            var temp_width=0;temp_data=0;one_total_list=0;
+            var temp_total=$('.layui-tab-title li[lay-id]').length;
+            for (var i=sum_total;i<temp_total;i++){
+                tab_click_list.push($('.layui-tab-title li').eq(i).attr("lay-id"));
+                temp_width = parseFloat($('.layui-tab-title li').eq(i).width())+30;
+                if (less_width > sum_title+less_sum_title) {
+                    less_width = less_width - temp_data;
+                    less_sum_title = less_width;
+                    break;
+                } else {
+                    //console.log('ok');
+                    less_width += temp_width;
+                    temp_data = temp_width;
+                    sum_total=i;
+                }
+            }
+
+            if (sum_total < temp_total-1) {
+                //用列表记录菜单滚动所有宽度
+                total_list.push(-less_width);
+                console.log(total_list,'个数');
+                var css = {
+                    "left": -less_width,
+                };
+                $('.layui-tab-title').css(css);
+            }
+
+        });
+        //向左移动
+        var left_sum_width = 0;less_total_list=0;less_one_total=2;
+        $('#left_button').click(function () {
+            var sum_title=parseFloat($('.layui-tab-title').width());
+            //temp_data存上一次宽度
+            var temp_width=0;temp_data=0;
+            var temp_total=$('.layui-tab-title li[lay-id]').length;
+            less_total_list=total_list.length-less_one_total;
+            ceshi = -total_list[less_total_list];
+            if (less_total_list >= 0) {
+                console.log(less_total_list, "less_total_list");
+                var css = {
+                    "left": total_list[less_total_list]
+                };
+                $('.layui-tab-title').css(css);
+                less_one_total += 1;
+            } else if (less_total_list < 0) {
+                var css = {
+                    "left": 0
+                };
+                $('.layui-tab-title').css(css);
+                //清除所有已赋值的变量
+                less_width=0;sum_total=0;less_sum_title=0;total_list=[];
+            }
+        });
+
+        //移动函数
+        function right_func(){
+            var less_width=0;sum_total=0;less_sum_title=0;
+            var total_list=[];   //记录菜单滚动宽度
+            var sum_title=parseFloat($('.layui-tab-title').width());
+            //temp_data存上一次宽度
+            var temp_width=0;temp_data=0;one_total_list=0;
+            var temp_total=$('.layui-tab-title li[lay-id]').length;
+            for (var i=sum_total;i<temp_total;i++){
+                console.log($('.layui-tab-title li').eq(i).attr("lay-id"),"lay-id");
+                temp_width = parseFloat($('.layui-tab-title li').eq(i).width())+30;
+                if (less_width > sum_title+less_sum_title) {
+                    less_width = less_width - temp_data;
+                    less_sum_title = less_width;
+                    break;
+                } else {
+                    //console.log('ok');
+                    less_width += temp_width;
+                    temp_data = temp_width;
+                    sum_total=i;
+                }
+            }
+
+            if (sum_total < temp_total-1) {
+                //用列表记录菜单滚动所有宽度
+                total_list.push(-less_width);
+                console.log(total_list,'个数');
+                var css = {
+                    "left": -less_width,
+                };
+                $('.layui-tab-title').css(css);
+            }
+
+        }
+
+
+
+        //选项卡的切换
+        element.on('tab(head_tabs)',function(data){   //触发选项卡的切换
+            var lay_id = $(this).attr("lay-id");
+            var nav_tree = $(".layui-nav-tree")
+            //移除其他选中
+            nav_tree.find("a[menu_id]").parent().removeClass("layui-this");  //!
+            var kv ="a["+lay_id+"]";
+            console.log(kv);
+            nav_tree.find(kv).parent().addClass("layui-this")
+        });
+
+        $(".left_navigation").click(function(){
+            var type="tabAdd";
+            var othis = $(this);
+            active[type] ? active[type].call(this, othis) : '';
+        });
+
+    });
+</script>
+</body>
+</html>

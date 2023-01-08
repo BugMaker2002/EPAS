@@ -1,0 +1,1 @@
+{"data":[{"level":"A","value":10},{"level":"B","value":30},{"level":"C","value":50},{"level":"D","value":40}],"dependencies":{"@antv/g2":"^4.2.8"}}

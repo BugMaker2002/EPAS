@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scut.mapper.ResultMapper">
+
+
+    <select id="selectByCondition" resultType="com.scut.pojo.Result">
+        select t_mutual_result.number,t_mutual_result.ID,t_mutual_result.year,
+               t_mutual_result.semester,t_mutual_result.grade,t_mutual_result.proximity
+        from t_mutual_result natural join t_member
+        <where>
+            <if test="d_name!=null and d_name!='' ">
+                and d_name like #{d_name}
+            </if>
+            <if test="position!=null and position!='' ">
+                and position like #{position}
+            </if>
+            <if test="year!=null">
+                and year=#{year}
+            </if>
+            <if test="semester!=null">
+                and semester=#{semester}
+            </if>
+        </where>
+    </select>
+    <select id="selectAll" resultType="com.scut.pojo.Result">
+        select  * from t_mutual_result
+    </select>
+</mapper>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>自评</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="self_assessment.css">
+    <link rel="stylesheet" href="../layui-v2.6.8/layui/css/layui.css">
+    <script type="text/javascript" src="self_assessment.js"></script>
+    <script type="text/javascript" src="../jquery-3.6.0.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../layui-v2.6.8/layui/layui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="all">
+        <div class="layui-row" style=" margin-top: 3%;">
+            <div class="layui-col-md11 layui-col-md-offset1">
+                <span>自我评价</span>
+            </div>
+        </div>
+
+        <div class="layui-row" style=" margin-top: 2%;">
+            <div class="layui-col-md11 layui-col-md-offset1">
+                <button class="layui-btn layui-btn-primary year_selector layui-btn-lg"
+                    style="height: 100%; color: gold;">
+                    <i id="show_year" style="font-style:normal;">年份</i>
+                    <i class="layui-icon layui-icon-down layui-font-12"></i>
+                </button>
+
+                <button class="layui-btn layui-btn-primary quarter_selector layui-btn-lg"
+                    style="height: 100%; color: gold; margin-left: 50px;">
+                    <i id="show_quarter" style="font-style:normal;">季度</i>
+                    <i class="layui-icon layui-icon-down layui-font-12"></i>
+                </button>
+
+                <button id="choose" type="button" class="layui-btn layui-btn-normal">查询</button>
+            </div>
+        </div>
+
+        <div class="layui-row" style=" margin-top: 4%;">
+            <div class="layui-col-md7 layui-col-md-offset1">
+                <textarea id="description" placeholder="请选择年份和季度查看或填写自评&#13;&#10;你的自评内容将会作为他人评价你时的参考&#13;&#10;您最多输入50字的自评！"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-row" style=" margin-top: 4%;">
+            <div class="layui-col-md2 layui-col-md-offset8">
+                <button id="submit" type="button" class="layui-btn layui-btn-primary layui-btn-lg"
+                    style="height: 100%; color: white;">
+                    提交
+                </button>
+            </div>
+        </div>
+        <div>
+</body>
+
+</html>

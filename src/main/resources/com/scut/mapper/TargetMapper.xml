@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scut.mapper.TargetMapper">
+
+    <select id="selectByCondition" resultType="com.scut.pojo.Target">
+        select * from t_target where d_name=#{d_name} and position=#{position} and year=#{year} and semester=#{semester}
+    </select>
+    <insert id="add">
+        insert into t_target (t_index, description, weight, d_name, position, year, semester)
+        values (#{t_index}, #{description}, #{weight}, #{d_name}, #{position}, #{year}, #{semester});
+    </insert>
+    <update id="modify">
+        update t_target
+        <set>
+            <if test=" t_index != null ">
+                t_index = #{t_index},
+            </if>
+            <if test=" description != null and description != '' ">
+                description = #{description},
+            </if>
+            <if test=" weight != null ">
+                weight = #{weight},
+            </if>
+            <if test=" d_name != null and d_name != '' ">
+                d_name = #{d_name},
+            </if>
+            <if test=" position != null and position != '' ">
+                position = #{position},
+            </if>
+            <if test=" year != null ">
+                year = #{year},
+            </if>
+            <if test=" semester != null ">
+                semester = #{semester},
+            </if>
+        </set>
+        <where>
+            <if test=" t_index != null ">
+                and t_index = #{t_index}
+            </if>
+            <if test=" d_name != null and d_name != '' ">
+                and d_name = #{d_name}
+            </if>
+            <if test=" position != null and position != '' ">
+                and position = #{position}
+            </if>
+            <if test=" year != null ">
+                and year = #{year}
+            </if>
+            <if test=" semester != null ">
+                and semester = #{semester}
+            </if>
+        </where>
+    </update>
+
+
+    <delete id="delete">
+        delete
+        from t_target
+        <where>
+            <if test=" t_index != null ">
+                and t_index = #{t_index}
+            </if>
+            <if test=" d_name != null and d_name != '' ">
+                and d_name = #{d_name}
+            </if>
+            <if test=" position != null and position != '' ">
+                and position = #{position}
+            </if>
+            <if test=" year != null ">
+                and year = #{year}
+            </if>
+            <if test=" semester != null ">
+                and semester = #{semester}
+            </if>
+        </where>
+    </delete>
+
+    <select id="selectTargetByCondition" resultType="Target">
+        select *
+        from t_target
+        <where>
+            <if test=" d_name != null and d_name != '' ">
+                and d_name like concat('%',#{d_name},'%')
+            </if>
+            <if test=" position != null and position != '' ">
+                and position like concat('%',#{position},'%')
+            </if>
+            <if test=" year != null ">
+                and year = #{year}
+            </if>
+            <if test=" semester != null ">
+                and semester = #{semester}
+            </if>
+        </where>
+    </select>
+</mapper>

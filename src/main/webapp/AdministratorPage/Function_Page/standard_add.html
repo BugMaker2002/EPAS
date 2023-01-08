@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>指标添加</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <input type="text" name="description" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权重</label>
+        <div class="layui-input-block">
+            <input type="text" name="weight" lay-verify="required" placeholder="请输入权重" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-block">
+            <input type="text" name="dept_name" required lay-verify="required" placeholder="请输入部门" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">职位</label>
+        <div class="layui-input-block">
+            <input type="text" name="post_name" required lay-verify="required" placeholder="请输入职位" autocomplete="off" class="layui-input">
+        </div>
+        <!--        <div class="layui-form-mid layui-word-aux"></div>-->
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年份</label>
+        <div class="layui-input-block">
+            <input type="text" name="year" lay-verify="required" placeholder="请输入年份" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">季度</label>
+        <div class="layui-input-block">
+            <input type="text" name="season" lay-verify="required" placeholder="请输入季度" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">确认添加</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</form>
+<script src="layui.js"></script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        form.on('submit(*)', function(data){
+            if(1) {
+                var data ={
+                    description: data.field.description,
+                    weight: data.field.weight,
+                    d_name: data.field.d_name,
+                    position: data.field.position,
+                    year: data.field.year,
+                    semester: data.field.semester
+                }
+                var json = JSON.stringify(data);
+                console.log("standard_add_data:")
+                console.log(json);
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8080/EPAS/TargetServlet/addTarget",
+                    dataType: "json",
+                    data: json,
+                    success:function(data){
+                        console.log(data.code);
+                        if(data.code == '0'){
+                            //当你在iframe页面关闭自身时
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            //layer信息提示
+                            layer.msg('更新成功');
+                            parent.location.reload(); //刷新父页面
+                            setTimeout(function () { parent.layer.close(index) }, 330);//延迟
+                        }else{
+                            layer.msg("添加失败")
+                        }
+                    },
+                    error:function () {
+                        layer.msg("添加失败")
+                    }
+
+                })
+
+
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            }
+
+        });
+
+        //各种基于事件的操作，下面会有进一步介绍
+    });
+</script>
+</body>
+</html>

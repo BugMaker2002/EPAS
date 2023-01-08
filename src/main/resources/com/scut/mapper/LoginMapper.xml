@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scut.mapper.LoginMapper">
+    <select id="selectAdministrator" resultType="administrator">
+        select * from t_administrator where BINARY acc=#{acc} and BINARY pwd=#{pwd}
+    </select>
+    <select id="selectMember" resultType="member">
+-- BINARY用于区分大小写
+        select * from t_member where BINARY acc=#{acc} and BINARY pwd=#{pwd}
+    </select>
+    <select id="selectMemberByID" resultType="member">
+        select * from t_member where ID=#{ID}
+    </select>
+
+</mapper>

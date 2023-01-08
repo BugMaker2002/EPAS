@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>互评</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="mutual_assessment.css">
+    <link rel="stylesheet" href="../layui-v2.6.8/layui/css/layui.css">
+    <script type="text/javascript" src="mutual_assessment.js"></script>
+    <script type="text/javascript" src="../jquery-3.6.0.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../layui-v2.6.8/layui/layui.js"></script>
+    <script src="../vue.js"></script>
+
+</head>
+
+<body>
+    <div class="layui-row" style=" margin-top: 3%;">
+        <div class="layui-col-md11 layui-col-md-offset1">
+            <span id="topText" style="text-align:left;">互评</span>
+        </div>
+    </div>
+
+    <div class="layui-row" style=" margin-top: 1%;">
+        <div class="layui-col-md11 layui-col-md-offset1">
+            <button class="layui-btn layui-btn-primary year_selector layui-btn-lg" style="height: 100%; color: gold;">
+                <i id="show_year" style="font-style:normal;">年份</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+
+            <button class="layui-btn layui-btn-primary quarter_selector layui-btn-lg"
+                style="height: 100%; color: gold; margin-left: 50px;">
+                <i id="show_quarter" style="font-style:normal;">季度</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+
+            <button id="choose" type="button" class="layui-btn layui-btn-normal">选择</button>
+        </div>
+    </div>
+    <div class="layui-row" style=" margin-top: 2%;" id="main">
+        <div class="layui-col-md10 layui-col-md-offset1">
+            <div class="layui-col-md2 card" v-for="(item,index) in all_people_data">
+                <div>
+                    <div class="card_top">
+                        <i class="layui-badge">{{item.state=='t'?'已评价':'未评价'}}</i>
+                    </div>
+                    <span>工号：{{item.iD}}</span>
+                    <span>姓名：{{item.name}}</span>
+                    <span>部门：{{item.d_name}}</span>
+                    <span>职位：{{item.position}}</span>
+                </div>
+                <button class="myButton" @click="click_button(item.iD,item.name,item.d_name,item.position,item.state, index)">
+                    {{item.state=='t'?'查看':'评价'}}
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

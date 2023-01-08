@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height">
+  <title>曲线折线图</title>
+  <style>::-webkit-scrollbar{display:none;}html,body{overflow:hidden;height:100%;margin:0;}</style>
+  <link rel="stylesheet" href="layui/css/layui.css" media="all">
+  <script src="layui/layui.js"></script>
+</head>
+<body>
+<div id="mountNode"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+<script>
+  // 在一行中保存多个城市的数据，需要将数据转换成
+  // {month: 'Jan', city: 'Tokyo', temperature: 3.9}
+  var data;
+  var $ = layui.jquery;
+  $.ajax({
+    url: "http://localhost:63343/pm/uqData.json",//dataURL,
+    success :function(json){
+      // var json = jQuery.parseJSON(htmlRestore(results));
+      data = json.data;
+      console.log(json);
+      console.log(data);
+      var ds = new DataSet();
+      var dv = ds.createView().source(data);
+      // fold 方式完成了行列转换，如果不想使用 DataSet 直接手工转换数据即可
+      dv.transform({
+        type: 'fold',
+        fields: ['Marketing', 'Business','Finance','Trade','Logistics'], // 展开字段集
+        key: 'department', // key字段
+        value: 'failureRate' // value字段
+      });
+      var chart = new G2.Chart({
+        container: 'mountNode',
+        forceFit: true,
+        height: window.innerHeight
+      });
+      chart.source(dv, {
+        month: {
+          range: [0, 1]
+        }
+      });
+      chart.tooltip({
+        crosshairs: {
+          type: 'line'
+        }
+      });
+      chart.axis('failureRate', {
+        label: {
+          formatter: function formatter(val) {
+            return val + '%';
+          }
+        }
+      });
+      chart.line().position('month*failureRate').color('department').shape('smooth');
+      chart.point().position('month*failureRate').color('department').size(4).shape('circle').style({
+        stroke: '#fff',
+        lineWidth: 1
+      });
+      chart.render();
+
+    }
+  })
+</script>
+
+</body>
+</html>

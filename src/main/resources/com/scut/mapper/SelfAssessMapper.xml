@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scut.mapper.SelfAssessMapper">
+    <insert id="submit">
+        insert into t_self_assessment values(#{ID},#{description},#{year},#{semester})
+    </insert>
+
+
+    <select id="select" resultType="com.scut.pojo.SelfAssess">
+        select * from t_self_assessment where ID=#{ID} and year=#{year} and semester=#{semester}
+    </select>
+</mapper>

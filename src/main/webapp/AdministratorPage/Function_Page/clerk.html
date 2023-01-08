@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+
+
+<div class="demoTable">
+    <div class="layui-inline">
+        <label class="layui-form-label">成员ID</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberID" class="layui-input" id="searchMemberID" placeholder="ID">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberName" class="layui-input" id="searchMemberName" placeholder="姓名">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberDepart" class="layui-input" id="searchMemberDepart" placeholder="部门">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">职位</label>
+        <div class="layui-input-inline">
+            <input type="text" name="searchMemberPosition" class="layui-input" id="searchMemberPosition" placeholder="职位">
+        </div>
+    </div>
+
+
+    <div class="layui-inline">
+        <button class="layui-btn" type="button" data-type="reload" lay-filter="LAY-user-front-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            搜索
+        </button>
+    </div>
+</div>
+<table id="clerkTable" lay-filter="test" style="width: auto"></table>
+<script type="text/css">
+    .layui-table-cell{
+        text-align:center;
+        height: auto;
+        white-space: normal;
+    }
+    .layui-table img{
+        max-width:300px
+    }
+
+
+
+</script>
+
+<!--<a href="http://localhost:63342/Library%20Project/Administrator/Function_Page/data.json">use</a>-->
+<button id="addEmpId" type="button" class="layui-btn layui-btn-fluid ">添加成员</button>
+<!--添加-->
+<script type="text/javascript">
+    /*
+    弹出添加弹窗
+  */
+    layui.use(['table'],function (){
+        var $ = layui.jquery;
+        var table = layui.table;
+        $("#addEmpId").click(function(){
+            layer.open({
+                type:2,
+                title:"添加成员",
+                content:"./clerk_add.html",
+                area:["600px","500px"],
+                shade:0.3,
+                anim:5,
+                end:function(){
+                    console.log("添加层被关闭了....");
+                    //刷新整合页面
+                    //location.reload();
+                    //只重载表格
+                    table.reload("clerkTable");
+                },
+
+            });
+
+        })
+
+    })
+</script>
+<script type="text/html" id="barDemo">
+    <button type='button' class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'>删除</button>
+    <button type='button' class='layui-btn layui-btn-xs layui-btn-warm' lay-event='edit'>更新</button>
+</script>
+<script type="text/html" id="imgCover">
+
+    <img src="{{d.imgPath}}}">
+
+</script>
+<!--表格 删除 更新-->
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+
+
+        //获取表格数据
+        table.render({
+            elem: '#clerkTable'
+            ,height: 312
+            ,id:'clerkTable'
+            ,url:"http://localhost:8080/EPAS/Administrator/selectAllMember"
+
+            ,page: false //开启分页
+
+            ,cols: [[ //表头字段匹配json数据文件
+                {field: 'iD', title: 'ID', width:'20%', sort: true, fixed: 'center'}  //user_id
+                ,{field: 'name', title: '姓名', width:'20%', sort: true}            //user_name
+                ,{field: 'd_name', title: '部门', width:'20%', sort: true}
+                ,{field: 'position', title: '职位', width:'20%', sort: true}
+                , {title:"操作",width:"20%",align:"center", toolbar: '#barDemo'}
+            ]]
+        });
+
+
+
+        //行的删除与修改
+        table.on('tool(test)',function(obj){
+            //获取当前行数据
+            var data = obj.data;
+            console.log(data);
+            //获取当前行点击的事件
+            var e = obj.event;
+            var submit = {
+                ID:data.iD
+            }
+            var subj= JSON.stringify(submit);
+            console.log(subj);
+            if(e=='del'){
+                //弹出删除窗口,确认是否删除
+                layer.confirm("是否删除?",{icon:3,title:"提示"},function(index){
+                    //调用AJAX删除后台数据--> 获取删除数据的ID
+                    $.ajax({
+                        type:"POST",
+                        url:"http://localhost:8080/EPAS/Administrator/delete",
+                        data:subj,
+                        dataType:'json',
+                        success:function(data2)
+                        {
+                            if(1){  //成功
+
+                                var rowIndex = $(obj.tr).attr('data-index');//当前行的索引
+
+                                var tableData = layui.table.cache['clerkTable'];
+                                obj.del(); //删除对应行
+
+                                tableData.splice(rowIndex,1); //删除缓存的行
+
+                                layer.close(index);
+
+                                table.reload("clerkTable");
+
+                                console.log(tableData);
+
+
+                            }else{
+                                //删除失败
+                                layer.msg("删除失败");
+                            }
+                        },
+                        error:function ()
+                        {
+                            //删除失败
+                            layer.msg("删除失败了");
+                        }
+
+                    })
+                    layer.close(index)
+                });
+            }else if(e=='edit'){
+                //弹出更新弹出层
+                layer.open({
+                    type:2,
+                    title:"更新成员信息",
+                    content:"./clerk_update.html",
+                    area:["600px","500px"],
+                    shade:0.3,
+                    anim:5,
+                    end:function(){
+                        console.log("更新层被关闭了....");
+                        //只重载表格
+                        table.reload("clerkTable");
+                    },
+                    success:function(layero,index2){
+                        //更新弹出层表单数据进行回显
+                        var cbody = layer.getChildFrame("body",index2);
+                        cbody.find("input[name='memberName']").val(data.name);//  书名
+                        cbody.find("input[name='d_name']").val(data.d_name);
+                        cbody.find("input[name='position']").val(data.position);
+                        var updateWin = layero.find('iframe')[0].contentWindow;
+                        updateWin.layui.form.render("radio");
+
+                        var iframe = window['layui-layer-iframe'+index2];
+                        console.log(iframe.child)
+                        // 向子页面的全局函数child传参
+                        iframe.child(data);
+                    }
+                });
+            }else{
+                //其他
+                layer.msg("对不起,功能还在路上...");
+            }
+        });
+
+
+        //搜索监听
+        active ={
+            reload: function(){
+                var index = layer.msg('查询中，请稍后...', { icon: 16, time: false, shade: 0 });
+                setTimeout(function (){
+                    //执行重载
+                    table.reload('clerkTable',{
+                        method:"post"
+                        ,page:false
+                        ,url:"http://localhost:8080/EPAS/Administrator/selectMemberByCondition"
+                        ,where:{
+                            // book_id :$("#searchBookID").val(),
+                            id :$("#searchMemberID").val(),
+                            // book_name :$("#searchBookName").val(),
+                            name :$("#searchMemberName").val(),
+                            // book_author :$("#searchBookAuthor").val(),
+                            d_name :$("#searchMemberDepart").val(),
+                            // book_publisher: $("#searchBookPublisher").val()
+                            position: $("#searchMemberPosition").val()
+                        }
+                    });
+                    console.log("你好")
+                    console.log($("#searchMemberID").val())
+                    console.log($("#searchMemberName").val())
+                    console.log($("#searchMemberDepart").val())
+                    console.log($("#searchMemberPosition").val())
+
+                    // console.log($("#searchBookName").val())
+                    layer.close(index);
+                },500);
+
+            }
+        }
+        $('.demoTable .layui-btn').on('click', function(){  //监听 搜索
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>

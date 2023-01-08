@@ -1,0 +1,132 @@
+/* 整体设置 */
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    background: rgb(30,30,30);
+}
+/**
+ * 设置日历的大小
+ */
+.calendar {
+    margin-top: 20%;
+    width: 100%;
+    height: auto;
+    display: block;
+    padding: 16px;
+    /* border: 1px solid black; */
+    box-shadow: 0px 10px 15px 2PX rgba(245,222,179,0.2);
+    border-radius: 4px;
+    font-size: 32px;
+}
+
+/**
+ * 设置日历顶部盒子
+ */
+.calendar .calendar-title-box {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    padding: 0 0 16px 0;
+    color: white;
+}
+
+.calendar .calendar-body-box {
+    color: #ddd;
+}
+/**
+ * 设置上个月的按钮图标
+ */
+.calendar .prev-month {
+    position: absolute;
+    top: 12px;
+    left: 0px;
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    border-left: 0px;
+    border-top: 12px solid transparent;
+    border-right: 19px solid #999;
+    border-bottom: 12px solid transparent;
+    cursor: pointer;
+}
+
+/**
+ * 设置下个月的按钮图标
+ */
+.calendar .next-month {
+    position: absolute;
+    top: 12px;
+    right: 0px;
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    border-right: 0px;
+    border-top: 12px solid transparent;
+    border-left: 18px solid #999;
+    border-bottom: 12px solid transparent;
+    cursor: pointer;
+}
+
+
+/* 设置日历表格样式 */
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* 表格行高 */
+.calendar-table tr {
+    height: 64px;
+    line-height: 30px;
+}
+
+/* 当前天 颜色特殊显示 */
+.currentDay {
+    color: rgb(252, 244, 5);
+    background: rgba(255,255,255,0.5);
+    border-radius: 100px;
+}
+
+/* 本月 文字颜色 */
+.currentMonth {
+    color: rgb(238, 221, 238);
+
+}
+
+/* 其他月颜色 */
+.otherMonth {
+    color: rgba(153, 153, 153, 0.737);
+}
+
+#now {
+    letter-spacing: 4px;
+    color: #ddd;
+    font-size: 36px;
+}
+
+.data {
+    color: rgba(255, 217, 0, 0.766);
+    font-size: 48px;
+}
+
+
+
+
+
+::-webkit-scrollbar {
+    width: 5px;
+    /* height: 10px; */
+    background-color: #858585;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+}
+

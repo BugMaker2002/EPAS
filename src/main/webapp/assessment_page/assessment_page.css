@@ -1,0 +1,114 @@
+body {
+    background: rgb(30, 30, 30);
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+span {
+    color: rgba(68, 232, 13, 0.794);
+    margin-left: 16px;
+    font-size: 32px;
+}
+
+.info {
+    color: rgba(245, 222, 179, 1);
+    letter-spacing: 4px;
+}
+
+p {
+    color: rgba(245, 222, 179, 0.7);
+    font-size: 24px;
+    display: inline;
+    text-align: center;
+    margin: 32px;
+}
+
+#user_relation {
+    background: none;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 1px;
+    border-left-width: 0px;
+    color: rgba(245, 222, 179, 1);
+    font-size: 32px;
+    width: 100px;
+    text-align: center;
+}
+
+.desc {
+    color: rgba(245, 222, 179, 1);
+    font-size: 24px;
+    display: inline;
+}
+
+.indices {
+    margin-left: 56px;
+    border: 1px solid rgba(245, 222, 179, 0.5);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 32px;
+}
+
+.star {
+    float: right;
+    display: inline-block;
+}
+
+
+#description {
+    width: 90%;
+    height: 200px;
+    margin: 32px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background: none;
+    /* border: 1px solid rgba(245,222,179,0.5); */
+    border-radius: 4px;
+    padding: 16px;
+    font-size: 24px;
+    color: rgba(255, 238, 206, 0.9);
+    overflow-y: auto;
+    letter-spacing: 4px;
+}
+
+.layui-row {
+    margin-bottom: 16px;
+}
+
+
+#submit {
+    float: right;
+    margin-right: 64px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    width: 100px;
+    height: 50px;
+    background: none;
+    border-radius: 8px;
+    font-size: 24px;
+    letter-spacing: 4px;
+    color: rgb(255, 255, 255);
+    border: 1px solid rgba(245, 222, 179, 0.5);
+    cursor: pointer;
+    text-align: center;
+}
+
+#submit:hover {
+    background: rgba(245, 222, 179, 0.2);
+    transition: 0.5s ease;
+}
+
+#submit:active {
+    background: rgba(245, 222, 179, 0.5);
+    transition: 0.1s ease;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    /* height: 10px; */
+    background-color: #858585;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>员工信息更新</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js"></script>
+
+    <script>
+        layui.use('upload',function(){
+            var $ = layui.jquery;
+            var upload = layui.upload;
+            let myFile;
+            upload.render({
+                elem: '#test1'
+                ,url: 'http://localhost:8080/EPAS/Administrator/update' //写自己接口的路径
+                ,before: function(obj){
+                    obj.preview(function(index, file, result){
+                        $('#demo1').attr('src', result);
+                        base64URL = result;
+                    });
+                }
+                ,
+                choose: function(obj) {
+                    obj.preview(function(index, file, result) {
+                        $('#demo1').attr('src', result); // 图片链接（base64）
+                        myFile = file;
+
+                    });
+                }
+                ,done:function (res) {
+                    console.log(res)
+                    if(res.code<0){
+                        return layer.msg('上传失败');
+                    }
+                    //成功
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #4cae4c;">上传成功</span>');//上传成功的提示消息
+
+                    var fileupload = $('#teaimg');
+                    fileupload.attr("value",res.src);//给input框赋值，src是回传的图片名称/路径
+                }
+            });
+
+        })
+        function child(dataFromFather) {
+            // console.log("122123123");
+
+
+            layui.use(['form', 'layer'],function () {
+                $ = layui.jquery;
+                var form = layui.form
+                    , layer = layui.layer;
+                // , update = layui.update;
+
+                // console.log("l999");
+                form.on('submit(*)', function (data) {
+                    method:"post";
+
+                    var data_sec = {
+                        ID: dataFromFather.iD,
+                        name: data.field.memberName,
+                        d_name: data.field.dept_name,
+                        position: data.field.post_name,
+                    }
+                    var json = JSON.stringify(data_sec);
+                    console.log("update::")
+                    console.log(json);
+                    $.ajax({
+                        type: "post",
+                        url: "http://localhost:8080/EPAS/Administrator/update",
+                        dataType: "json",
+                        data: json,
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code == 0) {
+
+                                //当你在iframe页面关闭自身时
+                                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                //layer信息提示
+                                layer.msg('更新成功');
+                                parent.location.reload(); //刷新父页面
+                                setTimeout(function () {
+                                    parent.layer.close(index)
+                                }, 330);//延迟
+
+                            } else {
+                                layer.msg("更新失败")
+                            }
+                        },
+                        error: function () {
+                            layer.msg("更新失败了")
+                        }
+
+                    })
+
+                    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                })
+
+
+            })
+        }
+
+        //各种基于事件的操作，下面会有进一步介绍
+    </script>
+</head>
+<body>
+<form class="layui-form"  enctype="multipart/form-data" method="post"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="memberName" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-block">
+            <input type="text" name="dept_name" required lay-verify="required" placeholder="请输入部门" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">职位</label>
+        <div class="layui-input-block">
+            <input type="text" name="post_name" required lay-verify="required" placeholder="请输入职位" autocomplete="off" class="layui-input">
+        </div>
+        <!--        <div class="layui-form-mid layui-word-aux"></div>-->
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">确认更改</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</form>
+<script>
+
+</script>
+
+</body>
+</html>

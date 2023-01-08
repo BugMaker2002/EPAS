@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height">
+    <title>日常作息可视化</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js"></script>
+    <!--  <style>::-webkit-scrollbar{display:none;}html,body{overflow:hidden;height:100%;margin:0;}</style>-->
+</head>
+<body>
+<div class="layui-collapse" lay-accordion>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">企业绩效总分布</h2>
+        <div class="layui-colla-content layui-show" id ="generalChart"></div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">各部门不合格占比</h2>
+        <div class="layui-colla-content layui-show" id ="mD"></div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">近五个季度各部门不合格率</h2>
+        <div class="layui-colla-content layui-show" id ="mountNode"></div>
+    </div>
+</div>
+
+    <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+<!--    <div id="unqualifiedChart"></div>-->
+
+
+
+
+<script type="module" >
+
+    var $ = layui.jquery;
+    var data;
+    const chart = new G2.Chart({
+        container: 'generalChart',
+        width: 600,
+        height: 300
+    })
+    var x={};
+    var jx =JSON.stringify(x);
+    // Step 2: 载入数据源
+    $.ajax({
+        url: "http://localhost:8080/EPAS/ResultServlet/chart1",//dataURL,
+        data:jx,
+        dataType:"json",
+        success :function(json){
+            // var json = jQuery.parseJSON(htmlRestore(results));
+            data = json.data;
+            // console.log(data);
+            chart.source(data);
+            // Step 3：创建图形语法，绘制柱状图，由 genre 和 sold 两个属性决定图形位置，genre 映射至 x 轴，sold 映射至 y 轴
+            chart.interval().position('type*value').color('type')
+            // Step 4: 渲染图表
+            chart.render();
+        }
+    })
+
+</script>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+
+<script>
+    // var text = ['MIDNIGHT', '3 AM', '6 AM', '9 AM', 'NOON', '3 PM', '6 PM', '9 PM'];
+    var data = [];
+    for (var i = 0; i < 24; i++) {
+        var item = {};
+        item.type = i + '';
+        item.value = 10;
+        data.push(item);
+    }
+    console.log('dd')
+    console.log(data)
+    var _DataSet = DataSet,
+        DataView = _DataSet.DataView;
+
+    var dv = new DataView();
+    dv.source(data).transform({
+        type: 'percent',
+        field: 'value',
+        dimension: 'type',
+        as: 'percent'
+    });
+    function newDepChart(depart){
+        var chart = new G2.Chart({
+            container: 'mD',
+            forceFit: true,
+            height: 400,//window.innerHeight,
+            padding: 80
+        });
+        chart.legend(false);
+        chart.tooltip({
+            showTitle: false
+        });
+
+        var bgView = chart.view();
+        bgView.coord('theta', {
+            innerRadius: 0.9
+        });
+        bgView.source(dv);
+        bgView.intervalStack().position('percent').color('type', ['rgba(255, 255, 255, 0)']).style({
+            stroke: '#444',
+            lineWidth: 1
+        }).tooltip(false).select(false);
+
+        bgView.guide().text({
+            position: ['50%', '50%'],
+            content: depart,
+            style: {
+                lineHeight: '140px',
+                fontSize: '18',
+                fill: '#262626',
+                textAlign: 'center'
+            }
+        });
+        return chart;
+    }
+    //Business Department":2,"Trade Department":1,"semester":"第一季度","Logistic Department":6,"Marketing Department":2,"Finance Department":2
+    var departName=['Marketing Department','Business Department','Finance Department','Trade Department','Logistic Department']
+    var chartArr=[];
+    for (i = 0; i < 5; i++){
+        var temp = newDepChart(departName[i]);
+        chartArr.push(temp);
+    }
+
+    var $ = layui.jquery;
+    // Step 2: 载入数据源
+    var x={};
+    var jx =JSON.stringify(x);
+    $.ajax({
+        url: "http://localhost:8080/EPAS/ResultServlet/chart3",//dataURL,
+        data:jx,
+        dataType:"json",
+        success :function(json){
+            // var json = jQuery.parseJSON(htmlRestore(results));
+            console.log("chart3")
+            console.log(json)
+            var datatemp;
+            var userData=[];
+            datatemp = json["Marketing Department"];
+            userData.push(datatemp);
+            datatemp = json["Business Department"];
+            userData.push(datatemp);
+            datatemp = json["Finance Department"];
+            userData.push(datatemp);
+            datatemp = json["Trade Department"];
+            userData.push(datatemp);
+            datatemp = json["Logistic Department"];
+            userData.push(datatemp);
+            for(i =0 ;i<5;++i){
+                showChart(chartArr[i],userData[i]);
+            }
+
+            function showChart(chart,userData){
+                var userDv = new DataView();
+                userDv.source(userData).transform({
+                    type: 'percent',
+                    field: 'value',
+                    dimension: 'type',
+                    as: 'percent'
+                });
+                var pieView = chart.view();
+                pieView.source(userDv, {
+                    percent: {
+                        formatter: function formatter(val) {
+                            return (val * 100).toFixed(2) + '%';
+                        }
+                    }
+                });
+                pieView.coord('theta', {
+                    innerRadius: 0.75
+                });
+                pieView.intervalStack().position('percent').color('type').label('type', {
+                    offset: 40
+                }).select(false);
+                chart.render();
+            }
+
+        }
+    })
+
+</script>
+
+
+<script>
+    // 在一行中保存多个城市的数据，需要将数据转换成
+    // {month: 'Jan', city: 'Tokyo', temperature: 3.9}
+    var data;
+    var $ = layui.jquery;
+    var x={};
+    var jx =JSON.stringify(x);
+    $.ajax({
+        url: "http://localhost:8080/EPAS/ResultServlet/chart2",//dataURL,
+        data:jx,
+        dataType:"json",
+        success :function(json){
+            // var json = jQuery.parseJSON(htmlRestore(results));
+            console.log("chart2")
+            console.log(json)
+
+            data = json.data;
+            console.log(json);
+            console.log(data);
+            var ds = new DataSet();
+            var dv = ds.createView().source(data);
+            // fold 方式完成了行列转换，如果不想使用 DataSet 直接手工转换数据即可
+            dv.transform({
+                type: 'fold',
+                fields: ['Marketing Department', 'Business Department','Finance Department','Trade Department','Logistic Department'], // 展开字段集
+                key: 'department', // key字段
+                value: 'failureRate' // value字段
+            });
+            var chart = new G2.Chart({
+                container: 'mountNode',
+                forceFit: true,
+                height: window.innerHeight
+            });
+            chart.source(dv, {
+                semester: {
+                    range: [0, 1]
+                }
+            });
+            chart.tooltip({
+                crosshairs: {
+                    type: 'line'
+                }
+            });
+            chart.axis('failureRate', {
+                label: {
+                    formatter: function formatter(val) {
+                        return val + '%';
+                    }
+                }
+            });
+            chart.line().position('semester*failureRate').color('department').shape('smooth');
+            chart.point().position('semester*failureRate').color('department').size(4).shape('circle').style({
+                stroke: '#fff',
+                lineWidth: 1
+            });
+            chart.render();
+
+        }
+    })
+</script>
+
+
+</body>
+</html>

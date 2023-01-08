@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>考核结果</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0">
+    <script type="text/javascript" src="assessment_result.js"></script>
+    <script type="text/javascript" src="../jquery-3.6.0.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="../layui-v2.6.8/layui/layui.js"></script>
+    <link rel="stylesheet" type="text/css" href="assessment_result.css">
+    <link rel="stylesheet" href="../layui-v2.6.8/layui/css/layui.css">
+
+</head>
+
+<body>
+    <h1 style="text-align: center; letter-spacing: 4px;">单季度考核结果</h1>
+        <div class="layui-col-md2 layui-col-md-offset5">
+            <hr class="layui-border-blue">
+        </div>
+    <!-- 单季度时间选择器 -->
+    <div class="layui-row" style=" margin-top: 0;">
+        <div class="layui-col-md4 layui-col-md-offset7">
+            <button id="single_year_selector" class="layui-btn layui-btn-primary  layui-btn-lg" style="height: 100%; color: gold;">
+                <i id="show_year" style="font-style:normal;">年份</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+    
+            <button id="single_quarter_selector" class="layui-btn layui-btn-primary  layui-btn-lg"
+                style="height: 100%; color: gold;">
+                <i id="show_quarter" style="font-style:normal;">季度</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+    
+            <button id="choose1" type="button" class="layui-btn layui-btn-normal">确定</button>
+        </div>
+    </div>
+
+    <div class="layui-row">
+        <div class="layui-col-md10 layui-col-md-offset1" style="margin-top:40px">
+            <div id="table1"></div>
+        </div>
+        <div class="layui-col-md4 layui-col-md-offset2">
+            <div id="table2"></div>
+        </div>
+        <div class="layui-col-md4" >
+            <div id="table3"></div>
+        </div>
+    </div>
+
+    <br><br>
+
+    <h1 style="text-align: center; letter-spacing: 4px;">历史考核统计结果</h1>
+        <div class="layui-col-md4 layui-col-md-offset4">
+            <hr class="layui-border-blue">
+        </div>
+    <!-- 多季度时间选择器 -->
+    <div class="layui-row" style=" margin-top: 0;">
+        <div class="layui-col-md8 layui-col-md-offset3">
+            <button id="start_year_selector" class="layui-btn layui-btn-primary layui-btn-lg" style="height: 100%; color: gold;">
+                <i id="start_year" style="font-style:normal;">年份</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+
+            <button id="start_quarter_selector" class="layui-btn layui-btn-primary  layui-btn-lg"
+                style="height: 100%; color: gold;">
+                <i id="start_quarter" style="font-style:normal;">季度</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+
+            <span id="to">至</span>
+
+            <button id="end_year_selector" class="layui-btn layui-btn-primary layui-btn-lg" style="height: 100%; color: gold;">
+                <i id="end_year" style="font-style:normal;">年份</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+          
+            <button id="end_quarter_selector" class="layui-btn layui-btn-primary layui-btn-lg"
+                style="height: 100%; color: gold;">
+                <i id="end_quarter" style="font-style:normal;">季度</i>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+            <button id="choose2" type="button" class="layui-btn layui-btn-normal">确定</button>
+        </div>
+    </div>
+    <br>
+
+    <div class="layui-row" style=" margin-top: 40px;">
+        <div class="layui-col-md7 layui-col-md-offset1" >
+            <div id="table4"></div>
+        </div>
+        <div class="layui-col-md3" >
+            <div id="table5"></div>
+        </div>
+    </div>
+
+
+</body>
+<script>/*Fixing iframe window.innerHeight 0 issue 3in Safari*/document.body.clientHeight;</script>
+<script src="../g2.min.js"></script>
+<script src="../data-set.min.js"></script>
+<script src="../jquery-3.2.1.min.js"></script>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>员工添加</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="memberName" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-block">
+            <input type="text" name="dept_name" required lay-verify="required" placeholder="请输入部门" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">职位</label>
+        <div class="layui-input-block">
+            <input type="text" name="post_name" required lay-verify="required" placeholder="请输入职位" autocomplete="off" class="layui-input">
+        </div>
+        <!--        <div class="layui-form-mid layui-word-aux"></div>-->
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="time" required lay-verify="required" placeholder="请输入注册时间" autocomplete="off" class="layui-input">
+        </div>
+        <!--        <div class="layui-form-mid layui-word-aux"></div>-->
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="account" required lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input">
+        </div>
+        <!--        <div class="layui-form-mid layui-word-aux"></div>-->
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">输入密码</label>
+        <div class="layui-input-inline">
+            <input type="password" name="newPassword" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+        <!--        <div class="layui-form-mid layui-word-aux"></div>-->
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码</label>
+        <div class="layui-input-inline">
+            <input type="password" name="confirmPassword" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">确认添加</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</form>
+<script src="layui.js"></script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        form.on('submit(*)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            var newpwd =  data.field.newPassword;
+            var confirmpwd = data.field.confirmPassword;
+            if(newpwd != confirmpwd){
+                layer.msg("两次输入密码不一致");
+                return false;
+            }else {
+                var data ={
+                    name: data.field.memberName,
+                    d_name: data.field.dept_name,
+                    position: data.field.post_name,
+                    pwd: data.field.newPassword,
+                    acc:data.field.account,
+                    register_time:data.field.time
+                }
+                var json = JSON.stringify(data);
+                console.log("clerk_add_data:")
+                console.log(json);
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8080/EPAS/Administrator/add",
+                    dataType: "json",
+                    data: json,
+                    success:function(data){
+                        console.log(data.code);
+                        if(data.code == '0'){
+                            //当你在iframe页面关闭自身时
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            //layer信息提示
+                            layer.msg('更新成功');
+                            parent.location.reload(); //刷新父页面
+                            setTimeout(function () { parent.layer.close(index) }, 330);//延迟
+                        }else{
+                            layer.msg("添加失败")
+                        }
+                    },
+                    error:function () {
+                        layer.msg("添加失败")
+                    }
+
+                })
+
+
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            }
+
+        });
+
+        //各种基于事件的操作，下面会有进一步介绍
+    });
+</script>
+</body>
+</html>

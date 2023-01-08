@@ -1,0 +1,9 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 2,
+  "data": [
+    {"target_id":1001,"description":"yyy","weight": "18%", "dept_name": "Marketing","post_name":"chief","year": 2021,"season": "season1"},
+    {"target_id":1002,"description":"xxx","weight": "12%", "dept_name": "Marketing","post_name":"chief","year": 2021,"season": "season2"}
+  ]
+}

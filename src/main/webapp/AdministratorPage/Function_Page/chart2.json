@@ -1,0 +1,5 @@
+{"data":
+[{"Business Department":2,"Trade Department":1,"semester":"第一季度","Logistic Department":6,"Marketing Department":2,"Finance Department":2},
+  {"Business Department":0,"Trade Department":1,"semester":"第二季度","Logistic Department":1,"Marketing Department":0,"Finance Department":1},
+  {"Business Department":1,"Trade Department":1,"semester":"第三季度","Logistic Department":1,"Marketing Department":1,"Finance Department":0},
+  {"Business Department":1,"Trade Department":4,"semester":"第四季度","Logistic Department":3,"Marketing Department":2,"Finance Department":2}]}

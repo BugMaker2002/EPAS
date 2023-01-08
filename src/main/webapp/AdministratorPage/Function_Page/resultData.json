@@ -1,0 +1,9 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 2,
+  "data": [
+    {"member_id":10000,"member_name":"user-0","level": "A","year": 2021,"season": "season1","proximity": 0.8},
+    {"member_id":10001,"member_name":"user-1","level": "A","year": 2021,"season": "season1","proximity": 0.9}
+  ]
+}
